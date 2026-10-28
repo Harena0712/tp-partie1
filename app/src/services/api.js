@@ -31,7 +31,10 @@ export default {
     return requete('/categories');
   },
 
-  getPlats() {
+  getPlats(categorieChoisie) {
+    if (categorieChoisie) {
+      return requete(`/plats?categorie=${categorieChoisie}`);
+    }
     return requete('/plats');
   },
 };
