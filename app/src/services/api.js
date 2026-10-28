@@ -37,4 +37,9 @@ export default {
     }
     return requete('/plats');
   },
+
+  getPlat(id) {
+    return requete(`/plats/${id}`);
+  },
+  
 };
