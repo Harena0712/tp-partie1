@@ -46,6 +46,12 @@
           </ion-label>
           <ion-badge v-if="!plat.disponible" color="medium">Épuisé</ion-badge>
           <ion-text slot="end" color="primary"><strong>{{ formatAriary(plat.prix) }}</strong></ion-text>
+
+          <ion-button slot="end" fill="clear" :disabled="!plat.disponible"
+                      @click.stop.prevent="ajouterAuPanier(plat)">
+            <ion-icon slot="icon-only" :icon="addCircleOutline" />
+          </ion-button>
+
         </ion-item>
       </ion-list>
     </ion-content>
@@ -58,10 +64,15 @@ import { ref, onMounted, computed } from 'vue';
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonSpinner, IonText, IonButton,
-  IonSearchbar, IonSegment, IonSegmentButton, IonBadge, IonRefresherContent, IonRefresher,
+  IonSearchbar, IonSegment, IonSegmentButton, IonBadge, 
+  IonRefresherContent, IonRefresher, IonIcon,
 } from '@ionic/vue';
+import { addCircleOutline } from 'ionicons/icons';
 import api from '@/services/api';
 import { formatAriary } from '@/utils/format';
+import { usePanier } from '@/composables/usePanier';
+
+const { ajouter } = usePanier();
 
 const plats = ref([]);
 const categories = ref([]);
@@ -98,7 +109,11 @@ const platsFiltres = computed(() =>
 
 async function rafraichir(event) {
   await charger();
-  event.target.complete(); // arrête l'animation
+  event.target.complete();
+}
+
+async function ajouterAuPanier(plat) {
+  ajouter(plat);
 }
 
 

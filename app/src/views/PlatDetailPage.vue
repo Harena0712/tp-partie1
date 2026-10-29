@@ -34,6 +34,13 @@
           <ion-text color="primary"><strong>{{ formatAriary(plat.prix) }}</strong></ion-text>
         </ion-card-content>
       </ion-card>
+
+      <ion-button expand="block" :disabled="!plat.disponible"
+                  @click.stop.prevent="ajouterAuPanier(plat)">
+                   Ajouter au panie 
+        <ion-icon slot="icon-only" :icon="addCircleOutline" />
+      </ion-button>
+
       </div>
     </ion-content>
   </ion-page>
@@ -43,11 +50,18 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { formatAriary } from '@/utils/format';
+import { addCircleOutline } from 'ionicons/icons';
 import api from '@/services/api';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
          IonButtons, IonBackButton, IonCard, IonCardHeader,
          IonCardTitle, IonCardContent, IonCardSubtitle, IonText,
-         IonButton, IonSpinner  } from '@ionic/vue';
+         IonButton, IonSpinner, IonIcon  } from '@ionic/vue';
+
+import { usePanier } from '@/composables/usePanier';
+import { useIonRouter } from '@ionic/vue';
+
+const ionRouter = useIonRouter();
+const { ajouter } = usePanier();
 
 const route = useRoute();
 
@@ -78,6 +92,12 @@ async function chargerPlat() {
   } finally {
     chargement.value = false;
   }
+}
+
+
+async function ajouterAuPanier(plat) {
+  ajouter(plat);
+  ionRouter.back();
 }
 
 onMounted(chargerPlat)
