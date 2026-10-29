@@ -41,7 +41,7 @@ export function usePanier() {
   ));
 
   const total = computed(() => lignes.value.reduce(
-    (total, l) => total + Number(l.plat.prix) , 0
+    (total, l) => total + Number(l.plat.prix) * l.quantite, 0
   ));
 
   return { lignes, ajouter, changerQuantite, vider, nombreArticles, total };
