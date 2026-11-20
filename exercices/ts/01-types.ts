@@ -10,12 +10,12 @@
 export const nomGargote = 'Chez Rado';
 
 // B. Trois erreurs à corriger (en changeant la valeur, pas le type)
-export const prix: number = '6000';
-export const disponible: boolean = 1;
-export const quantites: number[] = [1, '2', 3];
+export const prix: number = 6000;
+export const disponible: boolean = true;
+export const quantites: number[] = [1, 2, 3];
 
 // C. Les paramètres sont implicitement « any » : typez-les, ainsi que le retour.
 //    prixAvecService(6000, 0.1)  ->  6600
-export function prixAvecService(prix, taux) {
+export function prixAvecService(prix: number, taux: number) {
   return prix * (1 + taux);
 }

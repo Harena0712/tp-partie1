@@ -9,12 +9,20 @@ import type { Plat } from './02-interfaces.ts';
 //    Le type de retour  « x is Plat »  dit au compilateur : « si je renvoie true, x est un Plat ».
 export function estPlat(x: unknown): x is Plat {
   // TODO   indice : typeof x === 'object' && x !== null && 'id' in x && ...
+  return typeof x === 'object' && x !== null
+    && 'id' in x && typeof x.id === 'number'
+    && 'nom' in x && typeof x.nom === 'string'
+    && 'prix' in x && typeof x.prix === 'string';
 }
 
 // B. Dans un catch, l'erreur est de type unknown. Renvoyez son message si c'est une Error,
 //    sinon 'Erreur inconnue'.
 export function messageErreur(e: unknown): string {
   // TODO
+  if (e instanceof Error) {
+    return e.message;
+  }
+  return 'Erreur inconnue';
 }
 
 // C. source() renvoie des données non vérifiées.
@@ -22,4 +30,22 @@ export function messageErreur(e: unknown): string {
 //    ou [] si source() ne renvoie pas un tableau.
 export async function chargerPlats(source: () => Promise<unknown>): Promise<Plat[]> {
   // TODO
+  try {
+    const donnees = await source();
+
+    if (!Array.isArray(donnees)) {
+      return [];
+    }
+    const plats: Plat[] = [];
+    donnees.forEach(d => {
+      if (estPlat(d)) {
+        plats.push(d);
+      }
+    });
+
+    return plats;
+  } catch (error) {
+    messageErreur(error);
+    return [];
+  }
 }

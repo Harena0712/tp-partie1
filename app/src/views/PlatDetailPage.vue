@@ -32,6 +32,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-text color="primary"><strong>{{ formatAriary(plat.prix) }}</strong></ion-text>
+          <p v-if="riz">Avec du riz : {{ formatAriary(Number(plat.prix) + Number(riz.prix)) }}</p>
         </ion-card-content>
       </ion-card>
 
@@ -69,11 +70,13 @@ const plat = ref();
 const chargement = ref(true);
 const erreur = ref(null);
 
+const riz = ref(null);
+
 function nomPlat(plat) {
   return plat.nom ?? plat.libelle ?? '';
 }
 
-async function chargerPlat() {
+async function chargerPlat() { 
   chargement.value = true;
   erreur.value = null;
 
@@ -81,6 +84,7 @@ async function chargerPlat() {
 
   try {
     plat.value = await api.getPlat(id);
+    riz.value = await api.getPlat(7);
   } catch (e) {
     if (e.statut === 404) {
       erreur.value = "Ce plat n'existe pas";
